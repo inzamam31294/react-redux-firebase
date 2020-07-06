@@ -2,9 +2,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { loginUser } from "../actions";
+import { signupUser } from "../actions";
 import { withStyles } from "@material-ui/styles";
-
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -41,8 +40,12 @@ const styles = () => ({
   }
 });
 
-class Login extends Component {
-  state = { email: "", password: "" };
+class Signup extends Component {
+  state = { name:"", email: "", password: "", confirmPassword:"" };
+
+  handleNameChange = ({ target }) => {
+    this.setState({ name: target.value });
+  };
 
   handleEmailChange = ({ target }) => {
     this.setState({ email: target.value });
@@ -52,16 +55,21 @@ class Login extends Component {
     this.setState({ password: target.value });
   };
 
+  handleConfirmPasswordChange = ({ target }) => {
+    this.setState({ confirmPassword: target.value });
+  };
+
   handleSubmit = () => {
     const { dispatch } = this.props;
-    const { email, password } = this.state;
-
-    dispatch(loginUser(email, password));
+    const { name, email, password } = this.state;
+    if(this.state.password === this.state.confirmPassword){
+        dispatch(signupUser(name, email, password));
+    }
   };
 
   render() {
-    const { classes, loginError, isAuthenticated } = this.props;
-    if (isAuthenticated) {
+    const { classes, signupError, isSignedUp } = this.props;
+    if (isSignedUp) {
       return <Redirect to="/" />;
     } else {
       return (
@@ -71,8 +79,17 @@ class Login extends Component {
               {/* <LockOutlinedIcon /> */}
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Sign up
             </Typography>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              id="name"
+              label="Name"
+              name="name"
+              onChange={this.handleNameChange}
+            />
             <TextField
               variant="outlined"
               margin="normal"
@@ -92,7 +109,17 @@ class Login extends Component {
               id="password"
               onChange={this.handlePasswordChange}
             />
-            {loginError && (
+            <TextField
+              variant="outlined"
+              margin="normal"
+              fullWidth
+              name="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              id="confirmPassword"
+              onChange={this.handleConfirmPasswordChange}
+            />
+            {signupError && (
               <Typography component="p" className={classes.errorText}>
                 Incorrect email or password.
               </Typography>
@@ -105,11 +132,8 @@ class Login extends Component {
               className={classes.submit}
               onClick={this.handleSubmit}
             >
-              Sign In
+              Sign up
             </Button>
-            <div className="pt-2">
-              <a href="/signup" className="text-blue-700">Did'nt have an account!</a>
-            </div>
           </Paper>
         </Container>
       );
@@ -120,9 +144,9 @@ class Login extends Component {
 function mapStateToProps(state) {
   return {
     isLoggingIn: state.auth.isLoggingIn,
-    loginError: state.auth.loginError,
+    signupError: state.auth.signupError,
     isAuthenticated: state.auth.isAuthenticated
   };
 }
 
-export default withStyles(styles)(connect(mapStateToProps)(Login));
+export default withStyles(styles)(connect(mapStateToProps)(Signup));
