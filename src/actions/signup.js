@@ -1,4 +1,4 @@
-import { myFirebase } from "../plugins/firebaseConfig";
+import { myFirebase, db } from "../plugins/firebaseConfig";
 
 export const SIGNUP_REQUEST = "SIGNUP_REQUEST";
 export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
@@ -39,9 +39,13 @@ const errorSignup = () => {
 //   };
 
 export const signupUser = (name, email, password) => dispatch => {
+    const timeStamp = new Date()
+    const dbData = {name: name, email: email, timeStamp}
     dispatch(requestSignup())
     myFirebase.auth().createUserWithEmailAndPassword(email, password).then(user => {
-        dispatch(successSignup(user))
+        db.collection('authUsers').doc(user.user.uid).set({ dbData }).then(()=> {
+            dispatch(successSignup(user))
+        })
     })
     .catch(error => {
         dispatch(errorSignup())

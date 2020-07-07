@@ -10,6 +10,7 @@ export default (
         isSigningUp: false,
         isSignedUp: false,
         signUpError: false,
+        isAuthenticated: false,
         user:{}
     },
     action
@@ -26,6 +27,7 @@ export default (
                 ...state,
                 isSigningUp: false,
                 isSignedUp: true,
+                isAuthenticated: true,
                 user: action.user
             }
         case SIGNUP_FAILURE:
