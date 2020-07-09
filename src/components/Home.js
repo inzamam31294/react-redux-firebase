@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import { loginUser } from "../actions";
 import { logoutUser } from "../actions";
-// import { db } from "../plugins/firebaseConfig";
 
 
 
@@ -12,17 +10,12 @@ class Home extends Component {
     dispatch(logoutUser());
   };
 
-  // getUserName = () => {
-  //   return db.collection('authUsers').doc(loginUser.user.uid).get().then(name => {
-  //     return name
-  //   })
-  // }
 
   render() {
-    const { isLoggingOut, logoutError } = this.props;
+    const { isLoggingOut, logoutError, name } = this.props;
     return (
       <div>
-        <h1>This is your app's protected area.</h1>
+        <h1>{ name } This is your app's protected area.</h1>
         <p>Any routes here will also be protected</p>
         <button onClick={this.handleLogout} className="bg-orange-500 rounded p-2">Logout</button>
         {isLoggingOut && <p>Logging Out....</p>}
@@ -34,7 +27,8 @@ class Home extends Component {
 function mapStateToProps(state) {
   return {
     isLoggingOut: state.auth.isLoggingOut,
-    logoutError: state.auth.logoutError
+    logoutError: state.auth.logoutError,
+    name: state.auth.name
   };
 }
 export default connect(mapStateToProps)(Home);

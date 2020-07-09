@@ -1,4 +1,4 @@
-import { myFirebase } from "../plugins/firebaseConfig";
+import { myFirebase, db } from "../plugins/firebaseConfig";
 
 
 export const LOGIN_REQUEST = "LOGIN_REQUEST";
@@ -18,10 +18,11 @@ const requestLogin = () => {
   };
 };
 
-const successLogin = user => {
+const successLogin = (user, name) => {
   return {
     type: LOGIN_SUCCESS,
-    user
+    user,
+    name
   };
 };
 
@@ -67,8 +68,10 @@ export const loginUser = (email, password) => dispatch => {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(user => {
-      console.log(user)
-      dispatch(successLogin(user));
+      db.collection('authUsers').doc(user.user.uid).get().then(doc => {
+        const name = doc.data().dbData.name
+        dispatch(successLogin(user, name));
+      })
     })
     .catch(error => {
       //Do something with the error if you want!

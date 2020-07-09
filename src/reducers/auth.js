@@ -18,7 +18,8 @@ import {
       loginError: false,
       logoutError: false,
       isAuthenticated: false,
-      user: {}
+      user: {},
+      name: ''
     },
     action
   ) => {
@@ -34,7 +35,8 @@ import {
           ...state,
           isLoggingIn: false,
           isAuthenticated: true,
-          user: action.user
+          user: action.user,
+          name: action.name
         };
       case LOGIN_FAILURE:
         return {
