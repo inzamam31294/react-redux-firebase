@@ -4,8 +4,8 @@ export const SIGNUP_REQUEST = "SIGNUP_REQUEST";
 export const SIGNUP_SUCCESS = "SIGNUP_SUCCESS";
 export const SIGNUP_FAILURE = "SIGNUP_FAILURE";
 
-export const VERIFY_REQUEST = "VERIFY_REQUEST";
-export const VERIFY_SUCCESS = "VERIFY_SUCCESS";
+export const VERIFY_SIGNINGIN = "VERIFY_SIGNINGIN";
+export const VERIFY_SIGNEDUP = "VERIFY_SIGNEDUP";
 
 
 const requestSignup = () => {
@@ -26,17 +26,17 @@ const errorSignup = () => {
     }
 }
 
-// const verifyRequest = () => {
-//     return {
-//       type: VERIFY_REQUEST
-//     };
-//   };
+const signingInVerify = () => {
+    return {
+      type: VERIFY_SIGNINGIN
+    };
+  };
   
-//   const verifySuccess = () => {
-//     return {
-//       type: VERIFY_SUCCESS
-//     };
-//   };
+  const signedUpVerify = () => {
+    return {
+      type: VERIFY_SIGNEDUP
+    };
+  };
 
 export const signupUser = (name, email, password) => dispatch => {
     const timeStamp = new Date()
@@ -44,7 +44,7 @@ export const signupUser = (name, email, password) => dispatch => {
     dispatch(requestSignup())
     myFirebase.auth().createUserWithEmailAndPassword(email, password).then(user => {
         db.collection('authUsers').doc(user.user.uid).set({ dbData }).then(()=> {
-            dispatch(successSignup(user))
+            dispatch(successSignup(user, dbData.name))
         })
     })
     .catch(error => {
@@ -52,14 +52,14 @@ export const signupUser = (name, email, password) => dispatch => {
     })
 }
 
-// export const verifyAuth = () => dispatch => {
-//     dispatch(verifyRequest());
-//     myFirebase
-//       .auth()
-//       .onAuthStateChanged(user => {
-//         if (user !== null) {
-//           dispatch(successSignup(user));
-//         }
-//         dispatch(verifySuccess());
-//       });
-//   };
+export const verifySignUp = () => dispatch => {
+    dispatch(signingInVerify());
+    myFirebase
+      .auth()
+      .onAuthStateChanged(user => {
+        if (user !== null) {
+          dispatch(signedUpVerify(user));
+        }
+        dispatch(signedUpVerify());
+      });
+  };

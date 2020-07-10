@@ -68,8 +68,8 @@ class Signup extends Component {
   };
 
   render() {
-    const { classes, signupError, isAuthenticated } = this.props;
-    if (isAuthenticated) {
+    const { classes, signupError, isSignedUp } = this.props;
+    if (isSignedUp) {
       return <Redirect to="/" />;
     } else {
       return (
@@ -143,9 +143,9 @@ class Signup extends Component {
 
 function mapStateToProps(state) {
   return {
-    isSigningUp: state.auth.isSigningUp,
-    signupError: state.auth.signupError,
-    isAuthenticated: state.auth.isAuthenticated
+    isSigningUp: state.signup.isSigningUp,
+    signupError: state.signup.signupError,
+    isSignedUp: state.signup.isSignedUp
   };
 }
 

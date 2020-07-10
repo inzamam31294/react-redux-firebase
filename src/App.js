@@ -8,7 +8,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 
 function App(props) {
-  const { isAuthenticated, isVerifying } = props;
+  const { isAuthenticated, isVerifying, isSignedUp } = props;
   return (
     <Switch>
       <ProtectedRoute
@@ -17,6 +17,12 @@ function App(props) {
         component={Home}
         isAuthenticated={isAuthenticated}
         isVerifying={isVerifying}
+      />
+      <ProtectedRoute
+        exact
+        path="/"
+        component={Home}
+        isSignedUp={isSignedUp}
       />
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Signup} />
@@ -27,7 +33,9 @@ function App(props) {
 function mapStateToProps(state) {
   return {
     isAuthenticated: state.auth.isAuthenticated,
-    isVerifying: state.auth.isVerifying
+    isVerifying: state.auth.isVerifying,
+    isSignedUp: state.signup.isSignedUp,
+    // signUpVerify: state.signup.signUpVerify
   };
 }
 export default connect(mapStateToProps)(App);

@@ -13,6 +13,7 @@ class Home extends Component {
 
   render() {
     const { isLoggingOut, logoutError, name } = this.props;
+    // console.log(sname)
     return (
       <div>
         <h1>{ name } This is your app's protected area.</h1>
@@ -28,7 +29,8 @@ function mapStateToProps(state) {
   return {
     isLoggingOut: state.auth.isLoggingOut,
     logoutError: state.auth.logoutError,
-    name: state.auth.name
+    name: state.auth.name,
+    // sname: state.signup.name
   };
 }
 export default connect(mapStateToProps)(Home);

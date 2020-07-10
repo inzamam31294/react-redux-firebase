@@ -2,6 +2,8 @@ import {
     SIGNUP_REQUEST,
     SIGNUP_SUCCESS,
     SIGNUP_FAILURE,
+    VERIFY_SIGNINGIN,
+    VERIFY_SIGNEDUP
   } from "../actions/";
 
 
@@ -10,8 +12,9 @@ export default (
         isSigningUp: false,
         isSignedUp: false,
         signUpError: false,
-        isAuthenticated: false,
-        user:{}
+        signUpVerify: false,
+        user: {},
+        name: ''
     },
     action
 ) => {
@@ -27,8 +30,8 @@ export default (
                 ...state,
                 isSigningUp: false,
                 isSignedUp: true,
-                isAuthenticated: true,
-                user: action.user
+                user: action.user,
+                name: action.name
             }
         case SIGNUP_FAILURE:
             return {
@@ -37,6 +40,17 @@ export default (
                 isSignedUp: false,
                 signUpError: true
             }
+            case VERIFY_SIGNINGIN:
+                return {
+                  ...state,
+                  signUpVerify: true,
+                  verifyingError: false
+                };
+              case VERIFY_SIGNEDUP:
+                return {
+                  ...state,
+                  signUpVerify: false
+                };
         default:
             return state
     }
